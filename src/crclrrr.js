@@ -128,7 +128,7 @@ export default class Crclrrr {
     this.progress.style.opacity = Math.max(Math.min(this.current, 1), 0);
     this.progress.style.strokeDashoffset = Math.min(Math.max(percent, 0), this.totalLength);
 
-    if (this.current >= 100) {
+    if ((this.up && this.current >= 100) || (!this.up && this.current <= 0)) {
       this.el.classList.remove('loading');
 
       if (Array.isArray(this.callbacks.complete)) {
