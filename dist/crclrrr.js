@@ -1,5 +1,5 @@
 /*!
- * crclrrr - version 0.1.0
+ * crclrrr - version 0.2.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -124,13 +124,6 @@
       this.progress.style.strokeWidth = this.options.border;
       this.progress.style.strokeLinecap = this.options.round ? 'round' : 'butt';
 
-      if (typeof window.CustomEvent === 'function') {
-        this.event = new CustomEvent(this.options.baseClass + '-complete', { bubbles: true, cancelable: true });
-      } else {
-        this.event = document.createEvent('Event');
-        this.event.initEvent(this.options.baseClass + '-complete', true, true); //can bubble, and is cancellable
-      }
-
       this.init();
     }
 
@@ -157,16 +150,46 @@
         var p = (now - this.start) / this.duration || 0;
         var eased = this.options.easing(p);
 
-        if (this.current >= this.to) {
+        if (this.current === this.to) {
+          if (this.up && this.to !== 100 || !this.up && this.to !== 0) {
+            if (Array.isArray(this.callbacks.animated)) {
+              var _iteratorNormalCompletion = true;
+              var _didIteratorError = false;
+              var _iteratorError = undefined;
+
+              try {
+                for (var _iterator = this.callbacks.animated[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                  var fn = _step.value;
+
+                  /^f/.test(typeof fn === 'undefined' ? 'undefined' : _typeof(fn)) && fn.apply(this, [this]);
+                }
+              } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                  }
+                } finally {
+                  if (_didIteratorError) {
+                    throw _iteratorError;
+                  }
+                }
+              }
+            }
+          }
+          return false;
+        } else if (this.current > this.to) {
           if (this.up) {
             return false;
           }
-          this.current = Math.round(this.from - (this.from - this.to) * eased);
-        } else if (this.current <= this.to) {
+          this.current = Math.max(Math.min(Math.round(this.from - (this.from - this.to) * eased), this.from), this.to);
+        } else if (this.current < this.to) {
           if (!this.up) {
             return false;
           }
-          this.current = Math.round(this.from + (this.to - this.from) * eased);
+          this.current = Math.max(Math.min(Math.round(this.from + (this.to - this.from) * eased), this.to), this.from);
         }
 
         this._draw();
@@ -176,35 +199,34 @@
       key: '_draw',
       value: function _draw() {
         var percent = (100 - this.current) / 100 * this.totalLength;
-        this.progress.style.opacity = 1;
+        this.progress.style.opacity = Math.max(Math.min(this.current, 1), 0);
         this.progress.style.strokeDashoffset = Math.min(Math.max(percent, 0), this.totalLength);
 
-        if (this.current >= 100) {
+        if (this.up && this.current >= 100 || !this.up && this.current <= 0) {
           this.el.classList.remove('loading');
-          this.el.dispatchEvent(this.event);
 
           if (Array.isArray(this.callbacks.complete)) {
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-              for (var _iterator = this.callbacks.complete[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var fn = _step.value;
+              for (var _iterator2 = this.callbacks.complete[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var fn = _step2.value;
 
                 /^f/.test(typeof fn === 'undefined' ? 'undefined' : _typeof(fn)) && fn.apply(this, [this]);
               }
             } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                  _iterator.return();
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                  _iterator2.return();
                 }
               } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
                 }
               }
             }
