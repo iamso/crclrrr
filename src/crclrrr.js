@@ -106,13 +106,16 @@ export default class Crclrrr {
     const p = (now - this.start) / this.duration || 0;
     const eased = this.options.easing(p);
 
-    if (this.current >= this.to) {
+    if (this.current === this.to) {
+      return false;
+    }
+    else if (this.current > this.to) {
       if (this.up) {
         return false;
       }
       this.current = Math.max(Math.min(Math.round(this.from - (this.from - this.to) * eased), this.from), this.to);
     }
-    else if (this.current <= this.to) {
+    else if (this.current < this.to) {
       if (!this.up) {
         return false;
       }
