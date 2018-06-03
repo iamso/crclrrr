@@ -63,14 +63,6 @@ export default class Crclrrr {
     this.progress.style.strokeWidth = this.options.border;
     this.progress.style.strokeLinecap = this.options.round ? 'round' : 'butt';
 
-    if (typeof window.CustomEvent === 'function') {
-      this.event = new CustomEvent(`${this.options.baseClass}-complete`, {bubbles: true, cancelable: true});
-    }
-    else {
-      this.event = document.createEvent('Event');
-      this.event.initEvent(`${this.options.baseClass}-complete`, true, true); //can bubble, and is cancellable
-    }
-
     this.init();
   }
 
@@ -138,7 +130,6 @@ export default class Crclrrr {
 
     if (this.current >= 100) {
       this.el.classList.remove('loading');
-      this.el.dispatchEvent(this.event);
 
       if (Array.isArray(this.callbacks.complete)) {
         for (let fn of this.callbacks.complete) {
