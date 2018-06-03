@@ -110,13 +110,13 @@ export default class Crclrrr {
       if (this.up) {
         return false;
       }
-      this.current = Math.round(this.from - (this.from - this.to) * eased);
+      this.current = Math.max(Math.min(Math.round(this.from - (this.from - this.to) * eased), this.from), this.to);
     }
     else if (this.current <= this.to) {
       if (!this.up) {
         return false;
       }
-      this.current = Math.round(this.from + (this.to - this.from) * eased);
+      this.current = Math.max(Math.min(Math.round(this.from + (this.to - this.from) * eased), this.to), this.from);
     }
 
     this._draw();
@@ -125,7 +125,7 @@ export default class Crclrrr {
 
   _draw() {
     const percent = ((100 - this.current) / 100) * this.totalLength;
-    this.progress.style.opacity = 1;
+    this.progress.style.opacity = Math.max(Math.min(this.current, 1), 0);
     this.progress.style.strokeDashoffset = Math.min(Math.max(percent, 0), this.totalLength);
 
     if (this.current >= 100) {
