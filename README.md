@@ -53,11 +53,17 @@ crclrrr.reset(40); // resets to the specified value
 // Destroy the instance
 crclrrr.destroy()); // removes the SVG element
 
-// Listen for the complete event on the instance
+// Listen for the complete event on the instance.
+// This event is fired when the animation has finished.
+// When reaching the minimun/maximum, only the complete
+// event is fired.
+crclrrr.on('animated', function(instance) {});
+
+// Listen for the complete event on the instance.
+// This event is fired when either the minimum (0) or the
+// maximum (100) is reached, depeding on the direction.
 crclrrr.on('complete', function(instance) {});
 
-// Listen for the complete event on the element
-element.addEventListener('crclrrr-complete', function(e) {});
 ```
 
 License
