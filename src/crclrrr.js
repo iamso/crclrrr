@@ -107,6 +107,13 @@ export default class Crclrrr {
     const eased = this.options.easing(p);
 
     if (this.current === this.to) {
+      if ((this.up && this.to !== 100) || (!this.up && this.to !== 0)) {
+        if (Array.isArray(this.callbacks.animated)) {
+          for (let fn of this.callbacks.animated) {
+            /^f/.test(typeof fn) && fn.apply(this, [this]);
+          }
+        }
+      }
       return false;
     }
     else if (this.current > this.to) {
