@@ -1,6 +1,6 @@
 {
   "name": "crclrrr",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Simple circular progress.",
   "main": "dist/crclrrr.cjs.js",
   "module": "dist/crclrrr.esm.js",
