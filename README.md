@@ -8,14 +8,6 @@ While loading it adds the `loading` class to the element.
 Install
 -------
 
-### With Bower
-
-```bash
-bower install crclrrr
-```
-
-### With NPM
-
 ```bash
 npm install crclrrr
 ```
